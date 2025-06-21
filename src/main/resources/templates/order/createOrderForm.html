@@ -1,0 +1,89 @@
+<html layout:decorate="~{layout}" lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<div class="container mb-5" layout:fragment="content">
+    <div class="row">
+        <form role="form" th:object="${orderForm}" method="post" class="col-md-6">
+            <h2 class="my-4">제품 생산</h2>
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
+                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold">제품</label>
+                <select th:field="*{productName}" class="form-control">
+<!--                    <option value="">생산할 제품을 선택하세요</option>-->
+                    <option th:each="productName:${T(com.example.refoam.domain.ProductName).values()}" th:value="${productName}" th:text="${productName}"></option>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label class="form-label fw-bold" th:for="*{orderQuantity}">수량</label>
+                <input class="form-control" type="number" min="10" max="30" step="10" th:field="*{orderQuantity}" placeholder="10개부터 최대 30개까지 주문 가능합니다">
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-refoam">생산 등록</button>
+            </div>
+        </form>
+        <div class="col-md-6">
+            <h2 class="my-4">재고 현황</h2>
+            <canvas id="materialChart" height="150"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+        const materialLabels = ['EVA','WHITE','BLACK','BLUE','RED'];
+        const materialData = /*[[${materialData}]]*/ [];
+        const materialColors = /*[[${materialColors}]]*/ [];
+
+        // 수량 표시
+        const labelsWithCount = materialLabels.map((label, index) => {
+            return [label, `${materialData[index]}개`];
+        });
+
+        const ctx2 = document.getElementById('materialChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: labelsWithCount,
+                datasets: [{
+                    label: '원재료별 수량',
+                    data: materialData,
+                    backgroundColor: materialColors,
+                    borderColor: [
+                        'rgb(113,237,237)',
+                        'rgb(147,147,147)',
+                        'rgb(28,28,28)',
+                        'rgb(32,121,255)',
+                        'rgb(255,70,136)',
+                        'rgb(113,237,237)'
+                    ],
+                    borderWidth: 1.5
+                }]
+            },
+            options: {
+                layout:{
+                  padding:10
+                },
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'transparent',
+                        },
+                        ticks: { stepSize : 100 }
+                    },
+                    x: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'transparent',
+                        }
+                    }
+                },
+            }
+        });
+        window.addEventListener("DOMContentLoaded", function () {
+            connectWebSocket();
+            /* alert 처리 */
+            [[${errorMessage != null}]] ? alert([[${errorMessage}]]) : null;
+        });
+    </script>
+</div>
+</html>

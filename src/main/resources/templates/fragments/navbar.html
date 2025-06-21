@@ -1,0 +1,209 @@
+<nav th:fragment="navbar(activeMenu)"
+     class="navbar navbar-expand-md nav-bg fixed-top py-0">
+    <!-- 메뉴바 시작-->
+    <div class="container-fluid">
+        <a class="navbar-brand nav-font" th:href="@{/main}">
+            <img src="/images/logo_only.svg" alt="logo" class="my-2 ms-3 nav-img">
+            <img src="/images/logo_name.svg" alt="logo" class="my-2 md-hidden nav-img">
+        </a>
+        <!-- 종 아이콘 + 알림 배지 -->
+        <!-- 오디오 알림 추가 -->
+        <audio id="alertSound" src="/sounds/refoam_notify.mp3" preload="auto"></audio>
+        <div class="nav-item dropdown position-relative errorAlert-xs ms-auto">
+            <a href="#" id="alertDropdown-xs" data-bs-toggle="dropdown" aria-expanded="false" class="nav-link p-0">
+                <img src="/images/bell-fill.svg" alt="알림">
+
+                <!-- 배지 -->
+                <span id="alert-badge-xs"
+                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-size"
+                      style="display:none;">0</span>
+            </a>
+
+            <!-- 드롭다운 알림 목록 -->
+            <ul id="alert-dropdown-xs"
+                class="dropdown-menu dropdown-menu-end alert-dropdown mt-2"
+                aria-labelledby="alertDropdown"
+                style="max-height: 300px; overflow-y: auto; width: 280px; transform: translateX(30px); /* ← 오른쪽으로 20px 이동 */">
+                <!-- JS에서 알림 항목 동적으로 렌더링 -->
+            </ul>
+        </div>
+        <button class="navbar-toggler ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+                <li class="nav-item my-1 d-flex align-items-center gap-2 nav-account" th:if="${loginMember != null}">
+                    <img src="/images/person-circle.svg" alt="사람 아이콘">
+                    <span class="nav-font nav-no-link" th:text="${loginMember.username}+'님'">관리자</span>
+
+                    <!-- 종 아이콘 + 알림 배지 -->
+                    <div class="nav-item dropdown position-relative me-1 errorAlert-lg">
+                        <a href="#" id="alertDropdown" data-bs-toggle="dropdown" aria-expanded="false" class="nav-link p-0">
+                            <img src="/images/bell-fill.svg" alt="알림">
+
+                            <!-- 배지 -->
+                            <span id="alert-badge"
+                                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-size"
+                                  style="display:none;">0</span>
+                        </a>
+
+                        <!-- 드롭다운 알림 목록 -->
+                        <ul id="alert-dropdown"
+                            class="dropdown-menu alert-dropdown mt-2"
+                            aria-labelledby="alertDropdown"
+                            style="max-height: 300px; overflow-y: auto; width: 320px;">
+                            <!-- JS에서 알림 항목 동적으로 렌더링 -->
+                        </ul>
+                    </div>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="nav-font btn btn-sm btn-refoam margin-minus ms-1">로그아웃</button>
+                    </form>
+                    <div class="vr md-hidden"></div>
+                </li>
+
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle nav-font" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false" th:classappend="${activeMenu == 1} ? ' active' : ''">
+                        계정관리
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li th:if="${loginMember.position.name() != 'STAFF'}"><a class="dropdown-item nav-font"
+                                                                                 th:href="@{/employee/list}">직원 리스트</a>
+                        </li>
+                        <li th:if="${loginMember.position.name() != 'STAFF'}"><a class="dropdown-item nav-font"
+                                                                                 th:href="@{/employee/new}">직원 정보 등록</a>
+                        </li>
+                        <li th:if="${loginMember.position.name() != 'ADMIN'}"><a class="dropdown-item nav-font"
+                                                                                 th:href="@{/employee/{id}/edit(id=${loginMember.id})}">계정
+                            정보 수정</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle nav-font" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false" th:classappend="${activeMenu == 2} ? ' active' : ''">
+                        재고관리
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item nav-font" th:href="@{/material/list}">재고 리스트</a></li>
+                        <li><a class="dropdown-item nav-font" th:href="@{/material/new}">재고 발주</a></li>
+
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle nav-font" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false" th:classappend="${activeMenu == 3} ? ' active' : ''">
+                        공정관리
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item nav-font" th:href="@{/order/new}">제품 생산</a></li>
+                        <li><a class="dropdown-item nav-font" th:href="@{/order/list}">주문 리스트</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-font" th:href="@{/monitoring/main}"
+                       th:classappend="${activeMenu == 4} ? ' active' : ''">에러 모니터링</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 메뉴바 끝 -->
+    <script>
+        <!--    알림 발생 사운드 (PC만)    -->
+        // localStorage에서 이전 알림 수를 가져오기
+        let previousAlertCount = parseInt(localStorage.getItem('previousAlertCount')) || 0;
+
+        async function fetchAlerts() {
+            try {
+                const countRes = await fetch('/api/alerts/count');
+                const countData = await countRes.json();
+                const alertCount = countData.count;
+
+                const badge = document.querySelector('#alert-badge');
+                const badge2 = document.querySelector('#alert-badge-xs');
+                if (alertCount > 0) {
+                    badge.textContent = alertCount > 50 ? '50+' : alertCount;
+                    badge.style.display = 'inline-block';
+                    badge2.textContent = alertCount > 50 ? '50+' : alertCount;
+                    badge2.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                    badge2.style.display = 'none';
+                }
+
+                // 새 알림 감지
+                if (alertCount > previousAlertCount) {
+                    playAlertSound();
+                }
+
+                // localStorage에도 저장
+                previousAlertCount = alertCount;
+                localStorage.setItem('previousAlertCount', alertCount);
+
+                const listRes = await fetch('/api/alerts/unread');
+                const alerts = await listRes.json();
+
+                const dropdown = document.querySelector('#alert-dropdown');
+                const dropdown2 = document.querySelector('#alert-dropdown-xs');
+                dropdown.innerHTML = '';
+                dropdown2.innerHTML = '';
+
+                if (alerts.length === 0) {
+                    dropdown.innerHTML = `<li><span class="dropdown-item">읽지 않은 알림이 없습니다.</span></li>`;
+                    dropdown2.innerHTML = `<li><span class="dropdown-item">읽지 않은 알림이 없습니다.</span></li>`;
+                } else {
+                    alerts.forEach(alert => {
+                        const orderId = alert.orderId;
+                        const materialName = alert.materialName ?? '이름 없음';
+                        const label = orderId != null
+                            ? `<strong>[주문 ${orderId}]</strong>`
+                            : `<strong>[원재료 ${materialName}]</strong>`;
+                        const href = orderId != null
+                            ? `/alert/read/${alert.id}?orderId=${orderId}`
+                            : `/alert/read/${alert.id}?materialId=${alert.materialId}`;
+                        const item = document.createElement('li');
+                        item.innerHTML = `
+                    <a class="dropdown-item border-bottom alert-item py-2" href="${href}">
+                        <div>${label}</div>
+                        <div>${alert.message}</div>
+                    </a>
+                `;
+                        dropdown.appendChild(item);
+                        dropdown2.appendChild(item.cloneNode(true));
+                    });
+                }
+            } catch (e) {
+                console.error("알림 불러오기 실패", e);
+            }
+        }
+
+        function playAlertSound() {
+            const audio = document.getElementById('alertSound');
+            if (audio) {
+                audio.volume = 0.5;
+                audio.play().catch(e => console.log('사운드 재생 실패:', e));
+            }
+        }
+
+        // 초기 실행시 count 먼저 읽고 시작
+        window.addEventListener("DOMContentLoaded", fetchAlerts);
+        setInterval(fetchAlerts, 30000);
+
+        // 드롭다운 외부 클릭 시 자동 닫힘
+        document.addEventListener('click', function (event) {
+            const openDropdowns = document.querySelectorAll('.dropdown-menu.show');
+            openDropdowns.forEach(function(dropdown) {
+                if (!dropdown.parentElement.contains(event.target)) {
+                    const toggleButton = dropdown.parentElement.querySelector('[data-bs-toggle="dropdown"]');
+                    const bsDropdown = bootstrap.Dropdown.getInstance(toggleButton);
+                    if (bsDropdown) {
+                        bsDropdown.hide();
+                    }
+                }
+            });
+        });
+    </script>
+</nav>
+
+

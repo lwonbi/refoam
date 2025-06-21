@@ -1,0 +1,679 @@
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@100..900&display=swap');
+
+h1, h2, h3, h4, h5, .logo-font {
+    font-family: 'Do Hyeon', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #4166F5;
+}
+
+.nav-font {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-optical-sizing: auto;
+}
+
+.archive-font{
+    font-weight: 400;
+    font-style: normal;
+}
+
+.result-font {
+    font-size: 0.9em;
+}
+
+.refoam-font {
+    color: #4166F5;
+}
+
+.gray-font {
+    color: #6f6f6f;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-optical-sizing: auto;
+}
+
+/* header 영역  */
+/* 로그인 홈 배경이미지 */
+.bg-login {
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)), url('../images/refoam_login_bg.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* dropdown size */
+@media (min-width: 768px) {
+    .errorAlert-xs {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .errorAlert-lg {
+        display: none;
+    }
+}
+
+.alert-dropdown {
+    width: 100%; /* 부모 요소 기준으로 가득 차도록 */
+    min-width: 240px; /* 너무 작지 않게 최소값 설정 */
+    max-width: 90vw; /* 화면 너비의 90%를 넘지 않도록 */
+    max-height: 300px; /* 높이는 그대로 */
+    overflow-y: auto;
+}
+
+
+/* nav 영역 */
+@media (min-width: 300px) and (max-width: 860px) {
+    .md-hidden {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .nav-account {
+        background: #FFF;
+        padding: 10px 5px;
+        border-radius: 5px;
+    }
+
+    ul.navbar-nav {
+        margin-left: 16px !important;
+    }
+
+}
+
+/* 로그아웃버튼 간격용  */
+.margin-minus {
+    margin-left: -16px;
+}
+
+.badge-size {
+    min-width: 1.5rem; /* 최소 너비 */
+    /* 높이 */
+    font-size: 0.75rem;
+    padding: 4px 6px;
+    display: flex; /* 가운데 정렬용 */
+    align-items: center;
+    justify-content: center;
+}
+
+.alert-dropdown {
+    max-height: 400px; /* 원하는 높이로 조절 */
+    overflow-y: auto;
+}
+
+#alertDropdown.dropdown-toggle::after {
+    display: none !important;
+}
+
+
+.nav-img {
+    height: 40px;
+}
+
+.nav-link.active,
+.nav-link:hover {
+    color: #4166F5 !important;
+    font-weight: bold;
+}
+
+.nav-no-link {
+    display: block;
+    text-decoration: none;
+    background: none;
+    border: 0;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%; /* 버튼 바로 아래 */
+    left: 0; /* 왼쪽 맞춤 */
+    z-index: 1500;
+    /* 원하는 만큼 이동 가능 */
+    margin-top: 10px; /* 아래로 10px 내려줌 */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dropdown-item:hover {
+    color: #4166F5;
+    font-weight: 700;
+}
+
+.dropdown-item:active {
+    background-color: #cfe5f9;
+    color: #4166F5;
+}
+
+.nav-bg {
+    background-color: #ddf0f6;
+}
+
+.badge {
+    background-color: #FF8228;
+    padding: 2px 4px 2px;
+
+}
+
+#nav-hidden {
+    height: 66px;
+}
+
+
+/* 컨텐츠 영역 */
+.btn-refoam {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #4166F5;
+    --bs-btn-border-color: #4166F5;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #0b5ed7;
+    --bs-btn-hover-border-color: #0a58ca;
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #0a58ca;
+    --bs-btn-active-border-color: #0a53be;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #4166F5;
+    --bs-btn-disabled-border-color: #4166F5;
+}
+
+.btn-delete {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #FF8228;
+    --bs-btn-border-color: #FF8228;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #ff6944;
+    --bs-btn-hover-border-color: #ff6944;;
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #ff6944;;
+    --bs-btn-active-border-color: #ff6944;;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #FF8228;
+    --bs-btn-disabled-border-color: #FF8228;
+}
+
+.btn-font {
+    width: 80px;
+    height: 30px;
+    font-size: 0.9em;
+    padding: 0;
+    margin-bottom: 2px;
+}
+
+.btn-font-socket {
+    width: 80px;
+    height: 30px;
+    font-size: 0.9em;
+    margin-bottom: 2px;
+}
+
+/* 페이지네이션 */
+.page-link {
+    padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+    font-weight: 500;
+    color: #4166F5;
+    background-color: var(--bs-pagination-bg);
+    border: none;
+    --bs-pagination-disabled-color: rgba(65, 102, 245, 0.7);
+    --bs-pagination-disabled-bg: #ddf0f6;
+
+}
+
+.page-link:hover {
+    z-index: 2;
+    color: #FF8228;
+    text-decoration: none;
+    background-color: #ddf0f6;
+
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #ddf0f6;
+    background-color: #4166F5;
+}
+
+/* main 차트 관련*/
+.chart-wrapper {
+    height: 300px; /* 고정 높이만 커스텀으로 지정 */
+}
+
+.chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* 에러모니터링 7일 생산량 차트*/
+.chart-box {
+    position: relative;
+    width: 100%;
+    height: 45vh;
+    max-height: 400px;
+}
+
+/* 햄버거 버튼 메뉴 관련 */
+.navbar-toggler {
+    background-color: #ddf0f6;
+}
+
+.navbar-toggler-icon {
+    filter: invert(29%) sepia(91%) saturate(2127%) hue-rotate(221deg) brightness(101%) contrast(92%);
+}
+
+/* table size 설정 */
+@media (max-width: 999px) and (min-width: 540px) {
+    .table-lg {
+        display: none;
+    }
+
+    .table-font {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 540px) {
+    .table-lg {
+        display: none;
+    }
+
+    .table-font {
+        font-size: 0.9em;
+    }
+
+    .table-font2 {
+        font-size: 0.8em;
+    }
+}
+
+/* 모바일화면일 때 theader의 글자 줄바꿈이 되더라도 원하는 곳에서 줄바꿈하게하기위해서 */
+.mobile-br {
+    display: inline;
+}
+
+.mobile-br2 {
+    display: none;
+}
+
+@media (max-width: 450px) {
+    .mobile-br {
+        display: block;
+    }
+
+    .mobile-br2 {
+        display: block;
+        height: 0.8em;
+    }
+
+    /* 모바일에서만 금형온도,라벨을 왼쪽으로 더 가게 하기 위함 */
+    th:nth-child(2),
+    td:nth-child(2) {
+        padding-left: 0.6rem;
+    }
+
+    /* 모바일에선 처음, 마지막 페이지네이션 버튼 숨기기용*/
+    .page-item.page-first,
+    .page-item.page-last {
+        display: none !important;
+    }
+}
+
+@media (min-width: 999px) {
+    .table-md {
+        display: none;
+    }
+}
+
+
+/* 테이블 색상 영역 */
+.table {
+    --bs-table-accent-bg: #ddf0f6;
+    --bs-table-color: #000;
+}
+
+.table-hover > tbody > tr:hover > * {
+    --bs-table-bg-state: rgba(65, 102, 245, 0.2);
+
+}
+
+.table-striped > tbody > tr:nth-of-type(even) > * {
+    --bs-table-color-type: var(--bs-table-striped-color);
+    --bs-table-bg-type: rgba(221, 240, 246, 0.4);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-color-type: var(--bs-table-striped-color);
+    --bs-table-bg-type: #fff;
+}
+
+.double-stripe > tbody > tr:nth-child(4n-3),
+.double-stripe > tbody > tr:nth-child(4n-2) {
+    /*background-color: #ffffff !important;*/
+    --bs-table-color-type: var(--bs-table-striped-color);
+    --bs-table-bg-type: #fff;
+}
+
+.double-stripe > tbody > tr:nth-child(4n-1),
+.double-stripe > tbody > tr:nth-child(4n) {
+    /*background-color: #f0f8ff !important;*/
+    --bs-table-color-type: var(--bs-table-striped-color);
+    --bs-table-bg-type: rgba(221, 240, 246, 0.4);
+}
+
+
+/* 공정결과용 테이블 색상만 따로 지정 */
+.table-processes {
+    --bs-table-bg: #ddf0f6;
+    --bs-table-color: #000;
+    --bs-table-accent-bg: #ddf0f6;
+    --bs-table-bg-type: #ddf0f6;
+    --bs-table-bg-state: #ddf0f6;
+}
+
+/* 이거 안하면 공정 모달의 색상 이상해지므로 건들지 말 것*/
+.table-processes td {
+    box-shadow: none !important;
+}
+
+/* 세로 줄무늬만 흰 배경으로 */
+.table-processes tbody tr td:nth-child(even) {
+    background-color: #fff !important;
+    color: #000;
+}
+
+.table-processes tbody tr td:nth-child(odd) {
+    background-color: #ddf0f6 !important;
+    color: #000;
+}
+
+/* 모달에서 에러 뜨는 테이블 색상 적용하기 위해 필요함*/
+.table-processes tbody tr td.bg-warning:nth-child(even) {
+    background-color: #ffc107 !important;
+}
+
+
+/* ai 리포트 크기    */
+@media (min-width: 768px) {
+    .toast {
+        --bs-toast-max-width: 60vh !important;
+        width: 60vh !important;
+    }
+
+}
+
+/* 메인 + 에러모니터링 제일 윗 상단 */
+.tassei .tassei-err {
+    width: 100%;
+}
+
+
+.tassei-err > canvas {
+    height: 400px !important;
+}
+
+/* lg 이상(px 이상)일 때: 3:1 비율 */
+@media (min-width: 768px) {
+    .tassei {
+        aspect-ratio: 3 / 1; /* 가로:세로 = 3:1 */
+    }
+
+}
+
+/* md 사이즈 */
+@media (max-width: 991px) and (min-width: 758px) {
+    .tassei {
+        aspect-ratio: 4 / 1.2; /* 가로:세로 = 4:1 */
+    }
+}
+
+/* md 이하(px 미만)일 때: 4:1 비율 */
+@media (max-width: 767px) {
+    .tassei {
+        aspect-ratio: 4 / 1.2; /* 가로:세로 = 4:1 */
+    }
+}
+
+.tassei canvas {
+    width: 100% !important; /* 부모 너비(=100%) 꽉 채우기 */
+    height: 100% !important; /* 부모 높이도 100% 꽉 채우기 */
+}
+
+canvas:not(.product-chart){
+    border: 1px solid #ddd;
+}
+
+/* 제품별 차트 md 구간 (768px ~ 991px)일 때만 확대 */
+@media (min-width: 768px) and (max-width: 991px) {
+    .product-chart {
+        display: block;
+        width: 100% !important;
+        height: auto !important;
+        max-width: 500px; /* 최대 크기도 조금 제한 가능 */
+        margin: 0 auto;
+    }
+    .product-card{
+        display: block;
+        width: 100% !important;
+        height: auto !important;
+        max-width: 500px; /* 최대 크기도 조금 제한 가능 */
+        margin: 0 auto;
+    }
+}
+
+/* 플레이스홀더 색상 오류때메 만듦*/
+input::placeholder {
+    color: #595959 !important;
+    opacity: 1;
+}
+
+
+.footer-bg {
+    color: #4166F5;
+    background-color: #ddf0f6;
+    font-weight: 600;
+
+}
+
+
+a {
+    text-decoration: none;
+}
+
+/* 공정 완료 표시 */
+.status-light {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-left: 6px;
+    background-color: #ccc;
+}
+
+.green-light {
+    background-color: #4CAF50;
+}
+
+.yellow-light {
+    background-color: #FFC107;
+}
+
+.red-light {
+    background-color: #F44336;
+}
+
+/* 에러페이지용*/
+.error-page *,
+.error-page *::before,
+.error-page *::after {
+    box-sizing: border-box;
+}
+
+.error-page {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    min-width: 275px;
+    height: 100vh;
+    margin: 0 10vw;
+    overflow: hidden;
+    color: #138FF2;
+}
+
+.error-wrapper {
+    flex-grow: 2;
+    width: 40vw;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.error-wrapper h1 {
+    margin: 0;
+    font-size: 6em;
+    font-weight: 100;
+}
+
+.error-wrapper p {
+    width: 100%;
+    line-height: 1.4;
+}
+
+.error-buttons {
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.error-buttons a {
+    display: inline-block;
+    padding: .8em 1em;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    border: 3px solid #B9DDFB;
+    color: #138FF2;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: .2em;
+    position: relative;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.error-buttons a::before {
+    content: '';
+    background: #138FF2;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: -100%;
+    left: 0;
+    transition: .3s;
+    z-index: -1;
+}
+
+.error-buttons a:hover {
+    color: #E3F2FD;
+}
+
+.error-buttons a:hover::before {
+    top: 0;
+}
+
+.error-buttons span {
+    display: block;
+    text-transform: uppercase;
+    color: #B9DDFB;
+    letter-spacing: 1.5px;
+    text-align: center;
+}
+
+/* 애니메이션 요소 */
+.error-space {
+    width: 75px;
+    height: calc(50vh + 37.5px);
+    border-top-left-radius: 37.5px;
+    border-top-right-radius: 37.5px;
+    overflow: hidden;
+    margin: calc(50vh - 37.5px) auto 0 auto;
+    position: relative;
+    pointer-events: none;
+    transform: translateZ(0);
+}
+
+.error-blackhole {
+    border: 5px solid #1674D1;
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.error-blackhole::after {
+    content: '';
+    height: 85px;
+    width: 85px;
+    border: 5px solid #1674D1;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    z-index: 5;
+    transform: rotate(45deg);
+}
+
+.error-ship {
+    position: absolute;
+    bottom: -150px;
+    height: 150px;
+    width: 65px;
+    animation: error-blackhole-anim 4s infinite linear;
+}
+
+.error-ship img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+@keyframes error-blackhole-anim {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .error-page {
+        margin: 0 5vw;
+    }
+}

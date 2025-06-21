@@ -1,0 +1,329 @@
+<html layout:decorate="~{layout}" lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<div class="container mb-5" layout:fragment="content">
+    <h2 class="my-4">주문 리스트</h2>
+    <div class="table-responsive table-lg">
+        <table class="table table-hover text-center table-striped">
+            <thead>
+            <tr>
+                <th class="table-font text-center">번호</th>
+                <th>제품명</th>
+                <th>수량</th>
+                <th>주문날짜</th>
+                <th>등록자</th>
+                <th>상태</th>
+                <th class="text-center">공정관리</th>
+                <th>현황</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order, index : ${ordersList}">
+                <td th:text="${order.id}" class="text-center">1</td>
+                <td th:text="${order.productName}"></td>
+                <td th:text="${order.orderQuantity}"></td>
+                <td th:text="${#temporals.format(order.orderDate,'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${order.employee.username}"
+                    th:classappend="${!order.employee.active} ? 'text-decoration-line-through'">
+                </td>
+                <td th:id="'state-text-a-' + ${order.id}" th:text="${order.orderState}"></td>
+                <td class="text-center">
+                    <!-- 배합시작 버튼-->
+                    <form th:action="@{/order/{id}/first-process(id=${order.id})}" method="post" style="display:inline;">
+                        <input type="hidden" name="page" th:value="${ordersList.number}" />
+                        <button th:id="'mixing-button-a' + ${order.id}" type="submit"
+                                class="btn btn-sm btn-refoam me-2"
+                                th:disabled="${order.orderState != '준비 중'}">배합시작</button>
+                    </form>
+                    <!-- 공정시작 버튼 -->
+                    <form th:if="${order.orderState != '공정완료'}"
+                          th:id="'process-start-form-a-' + ${order.id}"
+                          th:action="@{/process/{id}/list(id=${order.id})}"
+                          method="post" style="display:inline;">
+                        <input type="hidden" name="page" th:value="${ordersList.number}" />
+                        <button id="start-btn-a-[[${order.id}]]"
+                                type="submit"
+                                class="btn btn-light border border-1 border-dark btn-sm me-2"
+                                th:disabled="${order.orderState != '배합완료'}">공정시작</button>
+                    </form>
+
+                    <!-- 공정완료 버튼 자리 확보용 (처음에는 공백) -->
+                    <a th:if="${order.orderState == '공정완료'}"
+                       th:href="@{/process/{id}/list(id=${order.id})}"
+                       class="btn btn-dark btn-sm border me-2">공정결과</a>
+                    <span th:id="'process-result-placeholder-a-' + ${order.id}"></span>
+                    <!-- 주문취소 버튼 -->
+                    <button type="button" th:attr="data-bs-toggle='modal', data-bs-target='#modal__' + ${order.id}" class="btn btn-delete btn-sm " th:if="${order.orderState == '준비 중'}"> 주문취소</button>
+
+                    <button type="button" th:attr="data-bs-toggle='modal', data-bs-target='#modal__' + ${order.id}" class="btn btn-delete btn-sm disabled" th:if="${order.orderState != '준비 중'}"> 주문취소</button>
+                </td>
+                <td>
+                    <span th:id="'progress-text-a-' + ${order.id}">[[${order.completedCount}]] / [[${order.orderQuantity}]]</span>
+                    <span th:id="'status-light-a-' + ${order.id}" class="status-light" th:classappend="
+                        ${order.completedCount} == 0 ? '' :
+                        (${order.errorRate} < 0.1 ? 'green-light' :
+                        (${order.errorRate} < 0.3 ? 'yellow-light' : 'red-light'))"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table-responsive table-md">
+        <table class="table table-font double-stripe align-middle text-center">
+            <colgroup>
+                <col style="width: 25%">   <!--md 사이즈 화면 비율로 조정 # -->
+                <col style="width: 25%">  <!-- 제품명 -->
+                <col style="width: 25%">  <!-- 주문수량 -->
+                <col style="width: 25%">  <!-- md 사이즈에서만 날짜포맷 변경 주문날짜  -->
+            </colgroup>
+            <thead>
+            <tr class="text-center">
+                <th>번호</th>
+                <th>제품명</th>
+                <th>수량</th>
+                <th>등록자</th>
+            </tr>
+            <tr class="text-center">
+                <th>주문날짜</th>
+                <th>상태</th>
+                <th>공정관리</th>
+                <th>현황</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="order, index : ${ordersList}">
+                <tr>
+                    <td th:text="${order.id}" class="ps-3">1</td>
+                    <td th:text="${order.productName}"></td>
+                    <td th:text="${order.orderQuantity}"></td>
+                    <td th:text="${order.employee.username}"
+                        th:classappend="${!order.employee.active} ? 'text-decoration-line-through'">
+                    </td>
+
+                </tr>
+                <tr>
+                    <td th:text="${#temporals.format(order.orderDate,'MM-dd HH:mm')}"></td>
+                    <td th:id="'state-text-b-' + ${order.id}" th:text="${order.orderState}" class="ps-3"></td>
+                    <td>
+                        <!-- 배합시작 버튼-->
+                        <form th:action="@{/order/{id}/first-process(id=${order.id})}" method="post" style="display:inline;">
+                            <input type="hidden" name="page" th:value="${ordersList.number}" />
+                            <button  th:id="'mixing-button-b-' + ${order.id}" type="submit"
+                                    class="btn btn-sm btn-refoam btn-font me-2"
+                                    th:disabled="${order.orderState != '준비 중'}">배합시작</button>
+                        </form>
+                        <!-- 공정시작 버튼 -->
+                        <br>
+
+                        <form th:if="${order.orderState != '공정완료'}"
+                              th:id="'process-start-form-b-' + ${order.id}"
+                              th:action="@{/process/{id}/list(id=${order.id})}"
+                              method="post" style="display:inline;">
+                            <input type="hidden" name="page" th:value="${ordersList.number}" />
+                            <button id="start-btn-b-[[${order.id}]]"
+                                    type="submit"
+                                    class="btn btn-light border border-1 border-dark btn-sm btn-font me-2"
+                                    th:disabled="${order.orderState != '배합완료'}">공정시작</button>
+                        </form>
+
+                        <!-- 공정완료 버튼 자리 확보용 (처음에는 공백) -->
+<!--                        <a th:if="${order.orderState == '공정완료'}"-->
+<!--                            th:href="@{/process/{id}/list(id=${order.id})}"-->
+<!--                            class="btn btn-dark btn-sm btn-font me-2">공정결과</a>-->
+                        <button type="button"  class="btn btn-dark btn-sm btn-font me-2" th:if="${order.orderState == '공정완료'}" th:onclick="|location.href='@{/process/{id}/list(id=${order.id})}'|"> 공정결과</button>
+                        <span th:id="'process-result-placeholder-b-' + ${order.id}"></span><br>
+                        <!-- 주문취소 버튼 -->
+                        <button type="button" th:attr="data-bs-toggle='modal', data-bs-target='#modal__' + ${order.id}" class="btn btn-delete btn-sm btn-font me-2" th:if="${order.orderState == '준비 중'}">주문취소</button>
+
+                        <button type="button" th:attr="data-bs-toggle='modal', data-bs-target='#modal__' + ${order.id}" class="btn btn-delete btn-sm btn-font me-2 disabled" th:if="${order.orderState != '준비 중'}">주문취소</button>
+                    </td>
+                    <td>
+                        <span th:id="'progress-text-b-' + ${order.id}">[[${order.completedCount}]] / [[${order.orderQuantity}]]</span>
+                        <span th:id="'status-light-b-' + ${order.id}" class="status-light" th:classappend="
+                        ${order.completedCount} == 0 ? '' :
+                        (${order.errorRate} < 0.1 ? 'green-light' :
+                        (${order.errorRate} < 0.3 ? 'yellow-light' : 'red-light'))"></span>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <!--     테이블 아래에 위치, order마다 모달 한 번씩 반복 -->
+    <th:block th:each="order : ${ordersList}">
+        <div class="modal fade"
+             th:id="'modal__' + ${order.id}"
+             tabindex="-1"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">삭제 확인</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body"
+                         th:text="|제품명: ${order.productName}을 삭제하시겠습니까?|">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-refoam" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-delete"
+                                th:onclick="|location.href='@{/order/{id}/delete(id=${order.id})}'|">삭 제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    <nav th:if="${!ordersList.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item page-first" th:classappend="${ordersList.first} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=0|}"><i class="bi bi-chevron-double-left"></i>처음</a>
+            </li>
+            <li class="page-item"  th:classappend="${!ordersList.hasPrevious()}?'disabled'">
+                <a class="page-link ps-0" th:href="@{|?page=${ordersList.number -1}|}"><i class="bi bi-chevron-left"></i>이전</a>
+            </li>
+            <li class="page-item" th:each="page:${#numbers.sequence(0,ordersList.totalPages -1)}" th:classappend="${page==ordersList.number}?'active'" th:if="${page >= ordersList.number -2 and page <= ordersList.number +2}">
+                <a class="page-link" th:text="${page + 1}" th:href="@{|?page=${page}|}">1</a></li>
+            <li class="page-item" th:classappend="${!ordersList.hasNext()}?'disabled'">
+                <a class="page-link pe-0" th:href="@{|?page=${ordersList.number +1}|}">다음<i class="bi bi-chevron-right"></i></a>
+            </li>
+            <li class="page-item page-last" th:classappend="${ordersList.last} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${ordersList.totalPages -1}|}">마지막<i class="bi bi-chevron-double-right"></i></a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+<div layout:fragment="scripts">
+    <!-- WebSocket 관련 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <script th:inline="javascript">
+        let stompClient = null;
+        let reconnectDelay = 5000; // 5초 재연결 대기
+
+        function connectWebSocket() {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.reconnect_delay = reconnectDelay;
+
+            stompClient.connect({}, function () {
+                console.log("웹소켓 연결됨");
+
+                stompClient.subscribe('/topic/process', function (message) {
+                    const data = JSON.parse(message.body);
+                    const orderId = data.orderId;
+                    const completed = data.completedCount;
+                    const total = data.totalCount;
+                    const errorRate = data.errorRate;
+                    const orderState = data.status;
+
+                    ["a", "b"].forEach(prefix => {
+                        const text = document.querySelector(`#progress-text-${prefix}-${orderId}`);
+                        const indicator = document.querySelector(`#status-light-${prefix}-${orderId}`);
+                        const state = document.querySelector(`#state-text-${prefix}-${orderId}`);
+
+                        // 상태 텍스트 갱신
+                        if (state) {
+                            state.textContent = orderState;
+                        }
+
+                        // 진행도 텍스트 갱신 (중복 방지)
+                        if (text) {
+                            const current = parseInt(text.textContent.split('/')[0].trim());
+                            if (completed > current) {
+                                text.textContent = `${completed} / ${total}`;
+                            }
+                        }
+
+                        // 상태등 색상 처리
+                        if (indicator) {
+                            indicator.className = "status-light";
+                            if (errorRate <= 0.1) {
+                                indicator.classList.add("green-light");
+                            } else if (errorRate <= 0.3) {
+                                indicator.classList.add("yellow-light");
+                            } else {
+                                indicator.classList.add("red-light");
+                            }
+                        }
+
+                        // 공정완료 상태 시 버튼 전환
+                        /*if (orderState === '공정완료') {
+                            const form = document.querySelector(`#process-start-form-${prefix}-${orderId}`);
+                            const placeholder = document.querySelector(`#process-result-placeholder-${prefix}-${orderId}`);
+
+                            if (form) form.remove();
+
+                            if (placeholder && !placeholder.querySelector('a')) {
+                                const resultLink = document.createElement("a");
+                                resultLink.href = `/process/${orderId}/list`;
+                                resultLink.className = "btn btn-dark btn-sm border me-2";
+                                resultLink.textContent = "공정결과";
+                                placeholder.appendChild(resultLink);
+                            }
+                        }*/
+                        if (orderState === '공정완료') {
+                            const formSelector = `#process-start-form-${prefix}-${orderId}`;
+                            const placeholderSelector = `#process-result-placeholder-${prefix}-${orderId}`;
+
+                            const form = document.querySelector(formSelector);
+                            const placeholder = document.querySelector(placeholderSelector);
+
+                            if (form) form.remove();
+
+                            if (placeholder && !placeholder.querySelector('a')) {
+                                const resultLink = document.createElement("a");
+                                resultLink.href = `/process/${orderId}/list`;
+
+                                // prefix에 따라 className 다르게 지정
+                                if (prefix === 'a') {
+                                    resultLink.className = "btn btn-dark btn-sm border me-2";
+                                } else if (prefix === 'b') {
+                                    resultLink.className = "btn btn-dark btn-sm btn-font-socket me-2";
+                                } else {
+                                    resultLink.className = "btn btn-dark btn-sm btn-font-socket me-2"; // 기본값
+                                }
+
+                                resultLink.textContent = "공정결과";
+                                placeholder.appendChild(resultLink);
+                            }
+                        }
+                    });
+                });
+                stompClient.subscribe('/topic/mixing', function (message) {
+                    const data = JSON.parse(message.body);
+                    const orderId = data.orderId;
+                    const state = data.state;
+
+                    ["a", "b"].forEach(prefix => {
+                        const stateElem = document.querySelector(`#state-text-${prefix}-${orderId}`);
+                        const button = document.querySelector(`#mixing-button-${prefix}-${orderId}`);
+
+                        // 상태 텍스트 갱신
+                        if (stateElem) {
+                            stateElem.textContent = state;
+                        }
+
+                        // 버튼 비활성화
+                        if (button) {
+                            button.disabled = true;
+                        }
+                        button.style.display = 'none';
+                        button.offsetHeight; // 강제 reflow
+                        button.style.display = '';
+                    });
+                });
+            }, function (error) {
+                console.error("웹소켓 연결 끊김, 재연결 시도중...", error);
+                setTimeout(connectWebSocket, reconnectDelay);
+            });
+        }
+
+        //window.addEventListener("DOMContentLoaded", connectWebSocket);
+        window.addEventListener("DOMContentLoaded", function () {
+            connectWebSocket();
+            /* alert 처리 */
+            [[${errorMessage != null}]] ? alert([[${errorMessage}]]) : null;
+        });
+    </script>
+</div>
+</html>

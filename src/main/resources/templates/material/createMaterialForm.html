@@ -1,0 +1,101 @@
+<html layout:decorate="~{layout}" lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<div class="container " layout:fragment="content">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="row">
+                <form role="form" th:action="@{/material/new}" th:method="post" th:object="${materialForm}" class="py-2 col-lg-6 order-2 order-lg-1 order-md-2 mb-3">
+                    <h2 class="py-2 py-md-4">재고 입력</h2>
+                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
+                        <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+                    </div>
+                    <div class="mb-2">
+                        <label th:for="*{materialName}" class="form-label fw-bold">원재료</label>
+                        <select th:field="*{materialName}" class="form-select">
+                            <option value="">원재료를 선택하세요</option>
+                            <option th:each="materialName : ${T(com.example.refoam.domain.MaterialName).values()}" th:text="${materialName}" th:value="${materialName}">원재료 명</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label th:for="*{materialQuantity}" class="form-label fw-bold">수량</label>
+                        <input th:field="*{materialQuantity}" class="form-control" type="number" placeholder="숫자를 입력하세요">
+                    </div>
+                    <div class="text-end">
+                        <button th:type="submit" class="btn btn-refoam px-3">&emsp;입&emsp; 력&emsp;</button>
+                    </div>
+                </form>
+                <form role="form" th:action="@{/material/orderPredict}" th:method="post" th:object="${predictRequest}" class="py-2 col-lg-6 order-1 order-lg-2 order-md-1 mb-3">
+                    <h2 class="py-4">재고 발주 예측하기</h2>
+                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors()}">
+                        <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+                    </div>
+                    <div class="mb-2">
+                        <p>3일 뒤 시점의 적합한 발주 수량을 예측합니다.<br>
+                            첫 번째 기준 날짜를 선택하시면 자동으로 연속된 3일의 날짜가 선택됩니다.<br>
+                            각 날짜의 발주 수량을 입력하여 예측을 요청하세요.</p>
+                        <label  class="form-label fw-bold">원재료</label>
+                        <div class="d-flex gap-2">
+                            <select class="form-control w-75" id="materialSelect" onchange="syncMaterialName(this.value)" th:field="*{orders[0].materialName2}">
+                                <option value="">원자재를 선택하세요</option>
+                                <option th:each="materialName2 : ${T(com.example.refoam.domain.MaterialName).values()}" th:text="${materialName2}" th:value="${materialName2}"></option>
+                            </select>
+                            <button th:type="submit" class="btn btn-refoam px-2 w-25 ">예측하기</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7 my-2">
+                            <label class="form-label logo-font fs-4 ">날짜</label>
+                            <hr class="mt-0 mb-3">
+                            <input class="form-control mb-2" type="date" id="date0" onchange="fillNextDates()" th:field="*{orders[0].date}">
+                            <input class="form-control mb-2" type="date" id="date1" th:field="*{orders[1].date}" readonly>
+                            <input class="form-control mb-2" type="date" id="date2" th:field="*{orders[2].date}" readonly>
+                        </div>
+                        <div class="col-5 my-2">
+                            <label class="form-label logo-font fs-4">수량</label>
+                            <hr class="mt-0 mb-3">
+                            <input class="form-control mb-2" type="number" th:field="*{orders[0].qty}">
+                            <input class="form-control mb-2" type="number" th:field="*{orders[1].qty}">
+                            <input class="form-control mb-2" type="number" th:field="*{orders[2].qty}">
+                        </div>
+                        <input type="hidden" th:field="*{orders[0].materialName2}" id="material0">
+                        <input type="hidden" th:field="*{orders[1].materialName2}" id="material1">
+                        <input type="hidden" th:field="*{orders[2].materialName2}" id="material2">
+                    </div>
+                    <hr class="mt-0 mb-3">
+                    <div class="mb-2">
+                        <label class=" form-label logo-font fs-4">예측 결과</label>
+                    </div>
+                    <p th:if="${prediction}" th:text="'예측 일자 (D+3) : ' + ${#temporals.format(predictedDate, 'yyyy-MM-dd')} + ' 입니다'"></p>
+                    <p th:if="${predictedDate}" th:text="'예측된 발주 수량 : ' + ${#numbers.formatDecimal(prediction, 1, 2)} + '개 입니다'"></p>
+                    <hr class="mt-2 mb-0 my-md-4">
+                </form>
+            </div>
+            <script>
+                function syncMaterialName(value) {
+                    document.getElementById("material0").value = value;
+                    document.getElementById("material1").value = value;
+                    document.getElementById("material2").value = value;
+                }
+                function fillNextDates() {
+                    const date0 = document.getElementById("date0").value;
+                    if (!date0) return;
+
+                    const baseDate = new Date(date0);
+                    const date1 = new Date(baseDate);
+                    const date2 = new Date(baseDate);
+
+                    date1.setDate(baseDate.getDate() + 1);
+                    date2.setDate(baseDate.getDate() + 2);
+
+                    // 날짜포맷 yyyy-MM-dd
+                    const formatDate = (d) => d.toISOString().split('T')[0];
+
+                    document.getElementById("date1").value = formatDate(date1);
+                    document.getElementById("date2").value = formatDate(date2);
+                }
+            </script>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+</html>
