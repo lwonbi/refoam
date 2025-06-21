@@ -152,16 +152,6 @@ public class ProcessService {
     // 퇴사자 표시를 위해 수정
     public List<Process> findAllOrder(Long orderId) {
         List<Process> processes = processRepository.findAllByOrder_Id(orderId);
-
-        for (Process p : processes) {
-            Employee e = p.getOrder().getEmployee();
-            String displayName = e.getUsername();
-            if (!e.isActive()) {
-                displayName += " (퇴사)";
-            }
-            p.setProcessDisplayName(displayName);  // transient 필드 세팅
-        }
-
         return processes;
     }
 
@@ -227,16 +217,7 @@ public class ProcessService {
         PageRequest pageable = PageRequest.of(page, 12);
         Page<Process> pageResult = this.processRepository.findAllByOrder_Id(orderId, pageable);
 
-        // ✅ 퇴사자 이름 표시 추가
-        return pageResult.map(p -> {
-            Employee e = p.getOrder().getEmployee();
-            String displayName = e.getUsername();
-            if (!e.isActive()) {
-                displayName += " (퇴사)";
-            }
-            p.setProcessDisplayName(displayName);
-            return p;
-        });
+        return pageResult;
     }
 
 }

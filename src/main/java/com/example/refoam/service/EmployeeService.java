@@ -1,7 +1,7 @@
 package com.example.refoam.service;
 
 import com.example.refoam.domain.Employee;
-import com.example.refoam.dto.EmployeeDto;
+import com.example.refoam.dto.EmployeeForm;
 import com.example.refoam.repository.EmployeeRepository;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -41,10 +41,9 @@ public class EmployeeService {
     }
 
     //전체 회원 조회
-    public List<EmployeeDto> employeeList() {
+    public List<Employee> employeeList() {
         return employeeRepository.findAll().stream()
                 .filter(Employee::isActive) // 퇴사자는 안 보이게
-                .map(EmployeeDto::from)
                 .collect(Collectors.toList());
     }
 
@@ -70,27 +69,11 @@ public class EmployeeService {
 
 
     // 페이징 구현용
-    public Page<EmployeeDto> getList(int page) {
-        // 최신순으로 보이게하기
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
-
-        PageRequest pageable = PageRequest.of(page, 12, Sort.by(sorts));
-
-        Page<Employee> employees = employeeRepository.findAll(pageable);
-
-        // 퇴사자 제외하고 DTO 변환
-        List<EmployeeDto> filtered = employees.getContent().stream()
-                .filter(Employee::isActive)
-                .map(EmployeeDto::from)
-                .collect(Collectors.toList());
-
-        log.info("직원 리스트: {}",
-                employees.getContent().stream().map(Employee::getLoginId).collect(Collectors.toList()));
-
-
-        return new PageImpl<>(filtered, pageable, filtered.size());
+    public Page<Employee> getList(int page) {
+        PageRequest pageable = PageRequest.of(page, 12, Sort.by(Sort.Order.desc("id")));
+        return employeeRepository.findByActiveTrue(pageable);
     }
+
 
 
 

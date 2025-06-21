@@ -49,19 +49,6 @@ public class MaterialService {
     // 퇴사자 있을 경우 때문에 수정함
     public List<Material> selectAll() {
         List<Material> materials = materialRepository.findAll();
-
-        materials.forEach(material -> {
-            if (material.getEmployee() != null) {
-                String displayName = material.getEmployee().getUsername();
-                if (!material.getEmployee().isActive()) {
-                    displayName += " (퇴사)";
-                }
-                material.setMaterialDisplayName(displayName);
-            } else {
-                material.setMaterialDisplayName("정보 없음");
-            }
-        });
-
         return materials;
     }
 
@@ -129,34 +116,7 @@ public class MaterialService {
         PageRequest pageable = PageRequest.of(page, 12, Sort.by(sorts));
         Page<Material> pageResult = materialRepository.findAll(pageable);
 
-        pageResult.forEach(material -> {
-            if (material.getEmployee() != null) {
-                String displayName = material.getEmployee().getUsername();
-                if (!material.getEmployee().isActive()) {
-                    displayName += " (퇴사)";
-                }
-                material.setMaterialDisplayName(displayName);
-            } else {
-                material.setMaterialDisplayName("정보 없음");
-            }
-        });
-
         return pageResult;
-
-//        return this.materialRepository.findAll(pageable);
     }
 
-    /*public List<MaterialChart> getMaterialChart() {
-        List<Material> materials = materialRepository.findAll();
-
-        return materials.stream()
-                .collect(Collectors.groupingBy(
-                        m -> m.getMaterialDate().toLocalDate(),
-                        Collectors.summingInt(Material::getMaterialQuantity)
-                ))
-                .entrySet().stream()
-                .map(entry -> new MaterialChart(entry.getKey(), entry.getValue()))
-                .sorted(Comparator.comparing(MaterialChart::getDate))
-                .toList();
-    }*/
 }

@@ -33,9 +33,5 @@ public class Material {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    // 퇴사자 표기용 임시 표시 이름
-    @Transient  // db 추가 안되게
-    @Getter @Setter
-    private String materialDisplayName;
 
 }

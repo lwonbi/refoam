@@ -55,7 +55,10 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private List<Material> materials = new ArrayList<>();
 
-
-
+    // 퇴사자 표기용 임시 표시 이름
+    @Transient
+    public String displayName() {
+        return active ? username : username + " (퇴사)";
+    }
 
 }

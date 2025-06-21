@@ -39,8 +39,8 @@ public class Process {
     @JoinColumn(name = "order_id")
     private Orders order;
 
-    @Transient
+    /*@Transient
     @Setter
-    private String processDisplayName;  // 퇴사자 표시
+    private String processDisplayName;  // 퇴사자 표시*/
 
 }

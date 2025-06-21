@@ -2,7 +2,6 @@ package com.example.refoam.controller;
 
 import com.example.refoam.domain.Employee;
 import com.example.refoam.domain.PositionName;
-import com.example.refoam.dto.EmployeeDto;
 import com.example.refoam.dto.EmployeeForm;
 import com.example.refoam.dto.EmployeeUpdateForm;
 import com.example.refoam.service.EmployeeService;
@@ -16,8 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -61,13 +58,10 @@ public class EmployeeController {
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-//        List<Employee> employees = employeeService.employeeList();
 
-        Page<EmployeeDto> paging = employeeService.getList(page); // DTO 기반 페이징
+        Page<Employee> paging = employeeService.getList(page);
 
         model.addAttribute("paging", paging);
-
-//        model.addAttribute("employees", employees);
         model.addAttribute("activeMenu", 1);
         return "employee/employeeList";
     }
