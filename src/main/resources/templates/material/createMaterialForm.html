@@ -32,7 +32,9 @@
                     <div class="mb-2">
                         <p>3일 뒤 시점의 적합한 발주 수량을 예측합니다.<br>
                             첫 번째 기준 날짜를 선택하시면 자동으로 연속된 3일의 날짜가 선택됩니다.<br>
-                            각 날짜의 발주 수량을 입력하여 예측을 요청하세요.</p>
+                            현재 발주 예측 모델은 1 ~ 500 사이의 수치로 최적화되어 있습니다.<br>
+                            각 날짜의 발주 수량(1~500)을 입력하여 예측을 요청하세요.
+                        </p>
                         <label  class="form-label fw-bold">원재료</label>
                         <div class="d-flex gap-2">
                             <select class="form-control w-75" id="materialSelect" onchange="syncMaterialName(this.value)" th:field="*{orders[0].materialName2}">
